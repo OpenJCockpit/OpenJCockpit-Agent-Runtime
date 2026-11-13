@@ -1,0 +1,23 @@
+package nl.metafactory.agentruntime.definition.model;
+
+import nl.metafactory.common.agentdefinition.SourceStatus;
+import nl.metafactory.common.agentdefinition.AgentDefinitionDocument;
+import java.util.Objects;
+
+public record ProviderResult(SourceStatus status, AgentDefinitionDocument document, String reason) {
+
+    public ProviderResult {
+        Objects.requireNonNull(status, "status");
+        if ((status == SourceStatus.FOUND) != (document != null)) {
+            throw new IllegalArgumentException("a document is present if and only if status is FOUND");
+        }
+    }
+
+    public static ProviderResult found(AgentDefinitionDocument document) {
+        return new ProviderResult(SourceStatus.FOUND, document, null);
+    }
+
+    public static ProviderResult of(SourceStatus status, String reason) {
+        return new ProviderResult(status, null, reason);
+    }
+}

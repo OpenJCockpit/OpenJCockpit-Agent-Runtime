@@ -1,0 +1,86 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    "group:monorepos",
+    "group:recommended",
+    "helpers:pinGitHubActionDigests",
+    "docker:pinDigests",
+    ":dependencyDashboard",
+    ":semanticCommits"
+  ],
+  "baseBranchPatterns": [
+    "main"
+  ],
+  "rebaseWhen": "conflicted",
+  "labels": [
+    "dependencies"
+  ],
+  "reviewers": [
+    "patrick473"
+  ],
+  "assignees": [
+    "patrick473"
+  ],
+  "automergeStrategy": "merge-commit",
+  "platformAutomerge": true,
+  "timezone": "Europe/Amsterdam",
+  "schedule": [
+    "before 6am on monday"
+  ],
+  "prHourlyLimit": 5,
+  "prConcurrentLimit": 10,
+  "rangeStrategy": "bump",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "before 6am on monday"
+    ],
+    "automerge": true
+  },
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "labels": [
+      "security"
+    ],
+    "automerge": true,
+    "minimumReleaseAge": "0 days"
+  },
+  "packageRules": [
+    {
+      "description": "Single grouped PR for all patch/digest updates; auto-merge once CI passes",
+      "matchUpdateTypes": [
+        "patch",
+        "digest"
+      ],
+      "groupName": "patch dependencies",
+      "groupSlug": "patch-dependencies",
+      "automerge": true
+    },
+    {
+      "description": "Single grouped PR for all minor updates; manual review",
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "groupName": "minor dependencies",
+      "groupSlug": "minor-dependencies"
+    },
+    {
+      "description": "Spring Boot + Spring AI move together",
+      "matchPackageNames": [
+        "org.springframework.boot:spring-boot-starter-parent",
+        "org.springframework.ai:spring-ai-bom"
+      ],
+      "groupName": "spring",
+      "groupSlug": "spring"
+    },
+    {
+      "description": "Embabel agent modules move together",
+      "matchPackageNames": [
+        "com.embabel.agent:{/,}**"
+      ],
+      "groupName": "embabel",
+      "groupSlug": "embabel"
+    }
+  ]
+}

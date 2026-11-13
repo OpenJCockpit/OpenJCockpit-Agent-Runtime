@@ -1,0 +1,12 @@
+# Profile `dev`: a workstation run without Keycloak or other external auth (pulls in `standalone` for the
+# tenant bindings). Spring Security accepts every request as the identity below; no sign-in, no token.
+# Never use outside a developer machine: the ProductionConfigGuard rejects `dev` next to `prod`.
+
+openjcockpit:
+  dev:
+    identity:
+      username: ${DEV_USERNAME:developer}
+      tenant: ${STANDALONE_TENANT:local}
+  agent-definitions:
+    # relative to the module directory (IntelliJ $MODULE_WORKING_DIR$, mvn -pl embabel-agent-runtime spring-boot:run)
+    local-root: ${AGENT_DEFINITIONS_LOCAL_ROOT:agent-definitions}

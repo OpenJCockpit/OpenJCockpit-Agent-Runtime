@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="EmbabelAgentRuntimeApplication (dev, mock LLM)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="dev,mock" />
+    <envs>
+      <env name="AGENT_DEFINITIONS_LOCAL_ROOT" value="embabel-agent-runtime/agent-definitions" />
+    </envs>
+    <module name="embabel-agent-runtime" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="nl.metafactory.agentruntime.EmbabelAgentRuntimeApplication" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

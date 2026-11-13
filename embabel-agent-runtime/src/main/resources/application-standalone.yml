@@ -1,0 +1,42 @@
+embabel:
+  models:
+    llms:
+      agent-chat: "${openjcockpit.llm.ollama.model}"
+      customer-chat: "${openjcockpit.llm.ollama.model}"
+
+openjcockpit:
+  llm:
+    coding:
+      route: ${LLM_CODING_ROUTE:direct}
+  agent-definitions:
+    enabled: true
+    tenant-claim: ${AGENT_DEFINITIONS_TENANT_CLAIM:tenant_id}
+    a2a:
+      enabled: ${A2A_ENABLED:true}
+      public-base-url: ${A2A_PUBLIC_BASE_URL:http://localhost:8082}
+  standalone:
+    tenant-bindings:
+      - tenant-id: ${STANDALONE_TENANT:local}
+        agent-id: business-analyst
+        enabled: true
+        model-alias: agent-chat
+        allowed-tools: [git.list_files, git.read_file]
+        required-guardrails: [pii-protection]
+      - tenant-id: ${STANDALONE_TENANT:local}
+        agent-id: solution-architect
+        enabled: true
+        model-alias: agent-chat
+        allowed-tools: [git.list_files, git.read_file]
+        required-guardrails: [pii-protection]
+      - tenant-id: ${STANDALONE_TENANT:local}
+        agent-id: software-developer
+        enabled: true
+        model-alias: agent-chat
+        allowed-tools: [git.list_files, git.read_file, git.write_file]
+        required-guardrails: [pii-protection]
+      - tenant-id: ${STANDALONE_TENANT:local}
+        agent-id: qa-engineer
+        enabled: true
+        model-alias: agent-chat
+        allowed-tools: [git.list_files, git.read_file, git.write_file]
+        required-guardrails: [pii-protection]

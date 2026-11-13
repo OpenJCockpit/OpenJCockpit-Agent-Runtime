@@ -1,0 +1,33 @@
+package nl.metafactory.agentruntime.definition.runtime;
+
+import com.embabel.agent.api.validation.guardrails.GuardRail;
+import nl.metafactory.agentruntime.definition.model.ResolvedAgentDefinition;
+import nl.metafactory.agentruntime.definition.skill.SkillPackage;
+import nl.metafactory.agentruntime.definition.tool.RegisteredAgentTool;
+
+import java.util.List;
+import java.util.Objects;
+
+public record PreparedAgent(
+        ResolvedAgentDefinition definition,
+        List<SkillPackage> skills,
+        List<RegisteredAgentTool> tools,
+        List<GuardRail> guardRails,
+        String description
+) {
+
+    public PreparedAgent {
+        Objects.requireNonNull(definition, "definition");
+        skills = List.copyOf(skills);
+        tools = List.copyOf(tools);
+        guardRails = List.copyOf(guardRails);
+        var skillIds = skills.stream().map(SkillPackage::id).toList();
+        if (!skillIds.equals(definition.skillIds())) {
+            throw new IllegalArgumentException("skill packages do not match the snapshot");
+        }
+        var toolIds = tools.stream().map(RegisteredAgentTool::id).toList();
+        if (!toolIds.equals(definition.toolIds())) {
+            throw new IllegalArgumentException("bound tools do not match the snapshot");
+        }
+    }
+}

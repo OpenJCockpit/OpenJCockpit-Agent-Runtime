@@ -1,0 +1,34 @@
+# Profile `mock` (the default when no profile is active): a deterministic in-memory LLM, no AI provider, key or network.
+# Every model name and role the other profiles use is pointed at it; the ProductionConfigGuard rejects `mock` next to `prod`.
+
+spring:
+  ai:
+    model:
+      chat: none
+      embedding: none
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
+
+embabel:
+  models:
+    default-llm: mock
+    default-embedding-model: mock-embedding
+    llms:
+      coding: mock
+      best: mock
+      cheapest: mock
+      agent-chat: mock
+      customer-chat: mock
+    embedding-services:
+      best: mock-embedding
+      cheapest: mock-embedding
+
+openjcockpit:
+  llm:
+    coding:
+      route: mock
+  agent-definitions:
+    local-root: ${AGENT_DEFINITIONS_LOCAL_ROOT:agent-definitions}
