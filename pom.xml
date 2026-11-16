@@ -29,7 +29,7 @@
         <embabel-agent.version>1.5.4</embabel-agent.version>
         <mcp-sdk.version>2.1.0</mcp-sdk.version>
         <bouncycastle.version>1.86</bouncycastle.version>
-        <mockwebserver.version>4.12.1</mockwebserver.version>
+        <mockwebserver.version>5.5.1</mockwebserver.version>
         <jacoco.version>0.8.16</jacoco.version>
     </properties>
 
