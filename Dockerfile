@@ -5,7 +5,7 @@ COPY service-common service-common
 COPY embabel-agent-runtime embabel-agent-runtime
 RUN --mount=type=cache,target=/root/.m2 mvn -B --no-transfer-progress package -DskipTests
 
-FROM eclipse-temurin:25-jre@sha256:ecdc0adb37bde1a281c4d245a3cd535004b1fc8322d560f5b09463b248c81df0
+FROM eclipse-temurin:25-jre@sha256:a640968ae55027b322cedd5f8228b01a84baff0b9e9360e47601c6a111ba1699
 WORKDIR /app
 RUN useradd --system --uid 10001 --home-dir /app --shell /usr/sbin/nologin runtime
 COPY --from=build /workspace/embabel-agent-runtime/target/embabel-agent-runtime-*.jar app.jar
