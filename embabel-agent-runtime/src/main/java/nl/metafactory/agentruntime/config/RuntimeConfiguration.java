@@ -7,6 +7,7 @@ import nl.metafactory.agentruntime.execution.ExecutionRegistry;
 import nl.metafactory.agentruntime.management.AgentServiceClient;
 import nl.metafactory.agentruntime.management.AgentServiceProperties;
 import nl.metafactory.agentruntime.workflowrun.WorkflowRunScopeResolver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,9 @@ import org.springframework.context.annotation.Configuration;
 public class RuntimeConfiguration {
 
     @Bean
-    AgentServiceClient agentServiceClient(AgentServiceProperties properties) {
-        return new AgentServiceClient(properties);
+    AgentServiceClient agentServiceClient(AgentServiceProperties properties,
+                                          @Value("${" + SecurityConfig.KEYCLOAK_ENABLED + ":true}") boolean keycloak) {
+        return keycloak ? new AgentServiceClient(properties) : AgentServiceClient.unavailable();
     }
 
     @Bean

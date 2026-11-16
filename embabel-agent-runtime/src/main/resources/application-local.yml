@@ -9,10 +9,14 @@ embabel:
       customer-chat: customer-chat
 
 openjcockpit:
+  # Keycloak by its compose service name; the tokens carry its public address (KC_HOSTNAME) as issuer.
+  keycloak:
+    url: ${KEYCLOAK_URL:http://keycloak:8080}
+  security:
+    jwt-issuer: ${KEYCLOAK_ISSUER:http://localhost:8080/realms/${openjcockpit.keycloak.realm}}
   # Management plane (tenant bindings, workflow runs, tool-call policy); any host or HTTPS URL works.
   agent-service:
     base-url: ${EMBABEL_AGENT_SERVICE_BASE_URL:http://embabel-agent-service:8081}
-    token-url: ${AGENT_RUNTIME_TOKEN_URL:http://keycloak:8080/realms/openjcockpit/protocol/openid-connect/token}
   # Agents' git tools reach the git MCP server through LiteLLM (mcp_servers.openjcockpit_git, granted to the
   # runtime's model key by local-seed).
   git-workspace:

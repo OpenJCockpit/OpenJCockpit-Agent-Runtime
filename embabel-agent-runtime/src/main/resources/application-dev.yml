@@ -3,6 +3,9 @@
 # Never use outside a developer machine: the ProductionConfigGuard rejects `dev` next to `prod`.
 
 openjcockpit:
+  security:
+    keycloak:
+      enabled: ${ENABLE_KEYCLOAK:false}
   dev:
     identity:
       username: ${DEV_USERNAME:developer}

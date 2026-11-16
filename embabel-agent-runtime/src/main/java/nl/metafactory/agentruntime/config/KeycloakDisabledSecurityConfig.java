@@ -11,10 +11,12 @@ import nl.metafactory.common.security.ProductionConfigGuard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,23 +28,28 @@ import org.springframework.security.web.authentication.AnonymousAuthenticationFi
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Profile {@code dev}: runs without Keycloak. No token is validated; every request is authenticated as one fixed
- * local identity carrying the tenant and trusted-caller claims the controllers read. Never combine with
- * {@code prod} ({@link ProductionConfigGuard} rejects it).
+ * {@code ENABLE_KEYCLOAK=false} (the default of profile {@code dev}): runs without Keycloak. No token is validated;
+ * every request is authenticated as one fixed local identity carrying the tenant and trusted-caller claims the
+ * controllers read. Refused next to {@code prod}.
  */
 @Configuration
 @EnableWebSecurity
-@Profile(DevSecurityConfig.PROFILE)
+@ConditionalOnBooleanProperty(name = SecurityConfig.KEYCLOAK_ENABLED, havingValue = false)
 @Import(ProductionConfigGuard.class)
-public class DevSecurityConfig {
+public class KeycloakDisabledSecurityConfig {
 
-    public static final String PROFILE = "dev";
+    private static final Logger log = LoggerFactory.getLogger(KeycloakDisabledSecurityConfig.class);
 
-    private static final Logger log = LoggerFactory.getLogger(DevSecurityConfig.class);
+    public KeycloakDisabledSecurityConfig(Environment environment) {
+        if (environment.acceptsProfiles(Profiles.of("prod"))) {
+            throw new IllegalStateException("Production configuration rejected (profile 'prod'): "
+                    + SecurityConfig.KEYCLOAK_ENABLED + " is false, every request would be unauthenticated");
+        }
+    }
 
     @Bean
     SecurityFilterChain devSecurityFilterChain(HttpSecurity http, Jwt devIdentity) throws Exception {
-        log.warn("security.dev-mode: authentication is disabled, every request runs as '{}' with claims {}",
+        log.warn("security.keycloak-disabled: authentication is disabled, every request runs as '{}' with claims {}",
                 devIdentity.getSubject(), devIdentity.getClaims());
         return http
                 .csrf(csrf -> csrf.disable())

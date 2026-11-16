@@ -38,8 +38,9 @@ starts and reports ready, but refuses agent runs, unless it runs with the `stand
 | Inbound A2A      | Enabled by the profile                          | Enabled; Agent Cards advertise `A2A_PUBLIC_BASE_URL` (default `http://localhost:8082`) |
 | Tool calls       | Decided per call by the platform's policy (OPA) | Denied: without a policy decision point every tool call fails closed, and agents answer from their input |
 
-Callers still need a JWT from the configured issuer (`KEYCLOAK_ISSUER`, `KEYCLOAK_JWK_SET_URI`) with the tenant claim
-(`tenant_id`). The seeded definitions use the same model aliases, tools and guardrails in both modes, so the platform's
+Callers still need a JWT from the configured Keycloak realm (`KEYCLOAK_URL`, `KEYCLOAK_REALM`) with the tenant claim
+(`tenant_id`), unless `ENABLE_KEYCLOAK=false`: then no Keycloak is used and every request is permitted as the local
+identity. The seeded definitions use the same model aliases, tools and guardrails in both modes, so the platform's
 LiteLLM registration keeps matching them.
 
 ## Requirements
@@ -118,12 +119,15 @@ certificates are reloaded without a restart; changes to trusted certificates app
 | `SPRING_PROFILES_ACTIVE`                  | _(none)_                                  | `standalone` without the platform, `local` for the OpenJCockpit compose stack, `prod` for deployments (no fallbacks; placeholders rejected). |
 | `STANDALONE_TENANT`                       | `local`                                   | Tenant the `standalone` profile binds the seeded agents to. |
 | `OPENAI_API_KEY`                          | _(required)_                              | OpenAI models (`best`, `cheapest`, embeddings).            |
-| `KEYCLOAK_ISSUER`, `KEYCLOAK_JWK_SET_URI` | local Keycloak                            | Accepted token issuer and its signing keys.                |
+| `ENABLE_KEYCLOAK`                         | `true` (`dev` profile: `false`)           | `false`: no Keycloak at all. Every request is permitted (`permitAll`) as one fixed local identity (`DEV_USERNAME`, tenant `STANDALONE_TENANT`) and the agent service is not called, so tenant bindings must come from the `standalone` profile. Refused with `prod`. |
+| `KEYCLOAK_URL`, `KEYCLOAK_REALM`          | `http://localhost:8080`, `openjcockpit`   | Keycloak realm: signing keys, token issuer and the runtime's token endpoint derive from it (`local` profile: `http://keycloak:8080`). |
+| `KEYCLOAK_CLIENT_ID`                      | `openjcockpit-agent-runtime`              | The runtime's own client in that realm (client credentials towards the agent service). |
+| `KEYCLOAK_ISSUER`, `KEYCLOAK_JWK_SET_URI` | derived from the realm                    | Override when Keycloak's public address (the `iss` in tokens, `KC_HOSTNAME`) differs from `KEYCLOAK_URL`. |
 | `LITELLM_BASE_URL`, `LITELLM_VIRTUAL_KEY` | `http://localhost:4000/v1`                | LiteLLM model gateway.                                     |
 | `LLM_CODING_ROUTE`                        | `gateway`                                 | `direct` sends the coding model straight to Ollama.        |
 | `OLLAMA_BASE_URL`, `OLLAMA_MODEL`         | `http://localhost:11434`, `qwen3.6:27b`   | Coding model.                                              |
 | `EMBABEL_AGENT_SERVICE_BASE_URL`          | _(blank: fail closed)_                    | Management plane.                                          |
-| `AGENT_RUNTIME_TOKEN_URL`, `AGENT_RUNTIME_CLIENT_SECRET` | _(blank)_                  | Runtime's client-credentials identity.                     |
+| `AGENT_RUNTIME_CLIENT_SECRET`             | _(blank)_                                 | Secret of `KEYCLOAK_CLIENT_ID`; `AGENT_RUNTIME_TOKEN_URL` overrides the derived token endpoint. |
 | `A2A_ENABLED`, `A2A_PUBLIC_BASE_URL`      | `false`, _(blank)_                        | Inbound A2A and the address advertised in Agent Cards.     |
 | `AGENT_DEFINITIONS_LOCAL_ROOT`            | `/agent-definitions`                      | Served definitions and skills.                             |
 

@@ -20,7 +20,15 @@ spring:
         jwt:
           jwk-set-uri: http://localhost:8080/realms/openjcockpit/protocol/openid-connect/certs
 openjcockpit:
+  # mirrors the main application.yml, which this file shadows (the profile files refer to it)
+  keycloak:
+    url: ${KEYCLOAK_URL:http://localhost:8080}
+    realm: ${KEYCLOAK_REALM:openjcockpit}
+    client-id: ${KEYCLOAK_CLIENT_ID:${AGENT_RUNTIME_CLIENT_ID:openjcockpit-agent-runtime}}
+    realm-url: ${openjcockpit.keycloak.url}/realms/${openjcockpit.keycloak.realm}
   security:
+    keycloak:
+      enabled: ${ENABLE_KEYCLOAK:true}
     jwt-issuer: http://localhost:8080/realms/openjcockpit
   # tests opt in to configuration-driven agents explicitly
   agent-definitions:

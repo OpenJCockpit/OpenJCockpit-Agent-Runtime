@@ -29,6 +29,10 @@ public class AgentServiceClient {
         this.rest = rest;
     }
 
+    public static AgentServiceClient unavailable() {
+        return new AgentServiceClient((RestClient) null);
+    }
+
     private static RestClient create(AgentServiceProperties properties) {
         if (properties.getBaseUrl() == null || properties.getBaseUrl().isBlank()) {
             return null;
