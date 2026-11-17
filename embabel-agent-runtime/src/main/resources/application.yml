@@ -136,6 +136,10 @@ openjcockpit:
     gateway-api-key: ${GIT_WORKSPACE_GATEWAY_API_KEY:}
     server-id: ${GIT_WORKSPACE_GIT_MCP_SERVER_ID:openjcockpit_git}
   llm:
+    # LiteLLM (default): models through the gateway (coding route below). OpenAI / Anthropic: every model role runs
+    # on AI_MODEL directly at that provider (OPENAI_API_KEY / ANTHROPIC_API_KEY). Other: no model; calls fail.
+    provider: ${AI_PROVIDER:LiteLLM}
+    model: ${AI_MODEL:}
     connect-timeout-seconds: ${LLM_CONNECT_TIMEOUT_SECONDS:45}
     read-timeout-seconds: ${LLM_READ_TIMEOUT_SECONDS:600}
     coding:

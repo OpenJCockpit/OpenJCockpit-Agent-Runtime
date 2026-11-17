@@ -34,6 +34,7 @@ public class OpenAiModelConfig {
     }
 
     @Bean
+    @ConditionalOnAiProvider(AiProvider.LITELLM)
     SpringAiLlmService gpt41Mini(OpenAiChatModel openAiChatModel, ObservationRegistry observationRegistry) {
         return new SpringAiLlmService(
                 "gpt-4.1-mini",
@@ -46,6 +47,7 @@ public class OpenAiModelConfig {
     }
 
     @Bean
+    @ConditionalOnAiProvider({AiProvider.LITELLM, AiProvider.OPENAI})
     EmbeddingService textEmbedding3Small(OpenAiEmbeddingModel openAiEmbeddingModel) {
         return new SpringAiEmbeddingService(
                 "text-embedding-3-small",

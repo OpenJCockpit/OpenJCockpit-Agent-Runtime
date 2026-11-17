@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Duration;
 
 @Configuration
+@ConditionalOnAiProvider(AiProvider.LITELLM)
 @ConditionalOnProperty(name = "openjcockpit.llm.coding.route", havingValue = "gateway", matchIfMissing = true)
 public class LiteLlmGatewayModelConfig {
 
