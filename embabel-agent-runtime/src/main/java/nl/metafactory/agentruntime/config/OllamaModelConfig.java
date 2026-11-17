@@ -32,6 +32,7 @@ import org.springframework.web.client.ResourceAccessException;
 import java.time.Duration;
 
 @ConditionalOnProperty(name = "openjcockpit.llm.coding.route", havingValue = "direct")
+@ConditionalOnAiProvider(AiProvider.LITELLM)
 @Configuration
 public class OllamaModelConfig {
 

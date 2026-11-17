@@ -9,13 +9,23 @@ final class UnsupportedEmbeddingModel implements EmbeddingModel {
 
     static final String MESSAGE = "The mock profile provides no embeddings; activate a real provider profile";
 
+    private final String message;
+
+    UnsupportedEmbeddingModel() {
+        this(MESSAGE);
+    }
+
+    UnsupportedEmbeddingModel(String message) {
+        this.message = message;
+    }
+
     @Override
     public EmbeddingResponse call(EmbeddingRequest request) {
-        throw new UnsupportedOperationException(MESSAGE);
+        throw new UnsupportedOperationException(message);
     }
 
     @Override
     public float[] embed(Document document) {
-        throw new UnsupportedOperationException(MESSAGE);
+        throw new UnsupportedOperationException(message);
     }
 }
