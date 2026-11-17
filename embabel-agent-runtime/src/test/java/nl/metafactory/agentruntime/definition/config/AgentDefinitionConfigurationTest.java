@@ -130,6 +130,19 @@ class AgentDefinitionConfigurationTest {
     }
 
     @Test
+    void anotherAiProviderRegistersNoGatewayModels() {
+        runner.withPropertyValues(
+                "openjcockpit.agent-definitions.enabled=true",
+                "openjcockpit.agent-definitions.local-root=src/test/resources/agent-definitions",
+                "openjcockpit.agent-definitions.litellm.gateway-model-aliases=customer-chat",
+                "openjcockpit.llm.provider=OpenAI"
+        ).run(ctx -> {
+            assertThat(ctx).hasNotFailed();
+            assertThat(ctx).doesNotHaveBean("agentGatewayLlm-customer-chat");
+        });
+    }
+
+    @Test
     void aGatewayAliasThatIsNotKebabCaseFailsStartup() {
         runner.withPropertyValues(
                 "openjcockpit.agent-definitions.enabled=true",

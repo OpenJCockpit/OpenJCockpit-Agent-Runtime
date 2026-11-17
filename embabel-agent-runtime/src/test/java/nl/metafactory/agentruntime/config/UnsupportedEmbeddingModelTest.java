@@ -24,4 +24,10 @@ class UnsupportedEmbeddingModelTest {
                 .isInstanceOf(UnsupportedOperationException.class)
                 .hasMessage(UnsupportedEmbeddingModel.MESSAGE);
     }
+
+    @Test
+    void theMessageCanNameWhyThereAreNoEmbeddings() {
+        assertThatThrownBy(() -> new UnsupportedEmbeddingModel("no embeddings here").embed("text"))
+                .hasMessage("no embeddings here");
+    }
 }

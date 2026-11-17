@@ -25,6 +25,9 @@ public class AgentGatewayModelRegistrar implements BeanDefinitionRegistryPostPro
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
+        if (AiProvider.of(environment) != AiProvider.LITELLM) {
+            return;
+        }
         var binder = Binder.get(environment);
         List<String> aliases = binder.bind(PREFIX + "gateway-model-aliases", Bindable.listOf(String.class))
                 .orElse(List.of());
