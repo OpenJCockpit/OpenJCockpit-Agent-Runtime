@@ -27,8 +27,8 @@
         <java.version>25</java.version>
         <spring-ai.version>2.0.2</spring-ai.version>
         <embabel-agent.version>1.5.4</embabel-agent.version>
-        <mcp-sdk.version>2.1.0</mcp-sdk.version>
-        <bouncycastle.version>1.86</bouncycastle.version>
+        <mcp-sdk.version>2.2.0</mcp-sdk.version>
+        <bouncycastle.version>1.87</bouncycastle.version>
         <okhttp.version>5.5.1</okhttp.version>
         <jacoco.version>0.8.16</jacoco.version>
     </properties>
