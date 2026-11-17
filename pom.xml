@@ -29,7 +29,7 @@
         <embabel-agent.version>1.5.4</embabel-agent.version>
         <mcp-sdk.version>2.1.0</mcp-sdk.version>
         <bouncycastle.version>1.86</bouncycastle.version>
-        <mockwebserver.version>5.5.1</mockwebserver.version>
+        <okhttp.version>5.5.1</okhttp.version>
         <jacoco.version>0.8.16</jacoco.version>
     </properties>
 
@@ -73,7 +73,12 @@
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>mockwebserver</artifactId>
-                <version>${mockwebserver.version}</version>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp-jvm</artifactId>
+                <version>${okhttp.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>
